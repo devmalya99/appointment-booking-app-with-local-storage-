@@ -28,8 +28,32 @@ myForm.addEventListener('submit', function(event) {
  // Create a new list item for the user
  const userItem = document.createElement('li');
 
- // Set the content of the list item to the user's data
- userItem.textContent = userData.name + ', ' + userData.email + ', ' + userData.number;
+/*
+The delete button is created and appended to each list item in your code. 
+However, the text content of the list item is overwritten after the delete button is appended, which is why you can't see the delete button.
+
+To fix this, you should append the user's data to the list item before appending the delete button. 
+*/
+
+
+// Set the content of the list item to the user's data
+userItem.textContent = userData.name + ', ' + userData.email + ', ' + userData.number;
+
+
+//create a delete button
+ const deleteBtn=document.createElement('button');
+ deleteBtn.textContent='Delete This';
+
+ //add a event listener to add functionality to the delete button 
+ deleteBtn.addEventListener('click',function(event)
+ {
+    userList.removeChild(userItem);
+    localStorage.removeItem(userKey);
+ })
+
+ //append the delete button to the list item
+ userItem.appendChild(deleteBtn);
+
 
  // Add the list item to the unordered list
  userList.appendChild(userItem);
