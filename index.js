@@ -1,29 +1,24 @@
-// Write your code below:
+// Grab the form by id
+const myForm = document.getElementById('myForm');
 
+// Now select form submission event for that use event listener
+myForm.addEventListener('submit', function(event) {
+  event.preventDefault();
 
-//grab the form by id
+  const name = document.getElementById('username').value;
+  const email = document.getElementById('email').value;
+  const number = document.getElementById('phone').value;
 
-const myForm=document.getElementById('myForm')
+  // Create a unique key for the user
+  const userKey = 'user_' + name;
 
-//now select form submission event for that use event listener
-
-myForm.addEventListener('submit' , function(event)
-{
-    event.preventDefault();
- 
-    const name=document.getElementById('username').value;
-    const email=document.getElementById('email').value
-    const number=document.getElementById('phone').value;
-
- 
- const userData= {
- 
+  // Create a new user data object
+  const userData = {
       name: name,
       email: email,
-      number:number
-}
+      number: number
+  };
 
-localStorage.setItem('userData', JSON.stringify(userData))
-
-
-})
+  // Store the user data object in local storage with the unique key
+  localStorage.setItem(userKey, JSON.stringify(userData));
+});
