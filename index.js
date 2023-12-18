@@ -4,6 +4,8 @@ const myForm = document.getElementById('myForm');
 // Select the unordered list from the DOM
 const userList = document.getElementById('userList');
 
+userList.style.listStyleType = 'decimal';
+
 // Now select form submission event for that use event listener
 myForm.addEventListener('submit', function(event) {
  event.preventDefault();
@@ -57,4 +59,37 @@ userItem.textContent = userData.name + ', ' + userData.email + ', ' + userData.n
 
  // Add the list item to the unordered list
  userList.appendChild(userItem);
+
+
+ //reset the input fields to empty
+ document.getElementById('username').value = '';
+ document.getElementById('email').value = '';
+ document.getElementById('phone').value = '';
+//create an edit button just after delete button
+const editBtn= document.createElement('button')
+
+//set the text content of the delete button
+ editBtn.textContent='Edit This';
+
+//add edit functionality: When you click on this edit button, 
+/*
+the user details should be removed from the screen and from the local storage and 
+should populate the input fields with the existing values.
+*/
+
+editBtn.addEventListener('click',function(event)
+{
+
+    userList.removeChild(userItem);
+    localStorage.removeItem(userKey);
+
+    document.getElementById('username').value =userData.name;
+    document.getElementById('email').value = userData.email
+    document.getElementById('phone').value = userData.number;
+})
+
+
+ //append the editBtn to the li element we created called userItems
+userItem.appendChild(editBtn)
+
 });
