@@ -1,95 +1,78 @@
-// Grab the form by id
-const myForm = document.getElementById('myForm');
-
-// Select the unordered list from the DOM
-const userList = document.getElementById('userList');
-
-userList.style.listStyleType = 'decimal';
-
-// Now select form submission event for that use event listener
-myForm.addEventListener('submit', function(event) {
- event.preventDefault();
-
- const name = document.getElementById('username').value;
- const email = document.getElementById('email').value;
- const number = document.getElementById('phone').value;
-
- // Create a unique key for the user
- const userKey = 'user_' + name;
-
- // Create a new user data object
- const userData = {
-     name: name,
-     email: email,
-     number: number
- };
-
- // Store the user data object in local storage with the unique key
- localStorage.setItem(userKey, JSON.stringify(userData));
-
- // Create a new list item for the user
- const userItem = document.createElement('li');
-
-/*
-The delete button is created and appended to each list item in your code. 
-However, the text content of the list item is overwritten after the delete button is appended, which is why you can't see the delete button.
-
-To fix this, you should append the user's data to the list item before appending the delete button. 
-*/
-
-
-// Set the content of the list item to the user's data
-userItem.textContent = userData.name + ', ' + userData.email + ', ' + userData.number;
-
-
-//create a delete button
- const deleteBtn=document.createElement('button');
- deleteBtn.textContent='Delete This';
-
- //add a event listener to add functionality to the delete button 
- deleteBtn.addEventListener('click',function(event)
- {
-    userList.removeChild(userItem);
-    localStorage.removeItem(userKey);
- })
-
- //append the delete button to the list item
- userItem.appendChild(deleteBtn);
-
-
- // Add the list item to the unordered list
- userList.appendChild(userItem);
-
-
- //reset the input fields to empty
- document.getElementById('username').value = '';
- document.getElementById('email').value = '';
- document.getElementById('phone').value = '';
-//create an edit button just after delete button
-const editBtn= document.createElement('button')
-
-//set the text content of the delete button
- editBtn.textContent='Edit This';
-
-//add edit functionality: When you click on this edit button, 
-/*
-the user details should be removed from the screen and from the local storage and 
-should populate the input fields with the existing values.
-*/
-
-editBtn.addEventListener('click',function(event)
+// The handleFormSubmit function is called when a form is submitted.
+function handleFormSubmit(event) 
 {
 
-    userList.removeChild(userItem);
-    localStorage.removeItem(userKey);
+    // The preventDefault function prevents the page from reloading upon form submission.
+    event.preventDefault();
 
-    document.getElementById('username').value =userData.name;
-    document.getElementById('email').value = userData.email
-    document.getElementById('phone').value = userData.number;
-})
+    // userDetails stores form inputs with keys named username, email, and phone.
+    const userDetails = 
+    {
+      username: event.target.username.value,
+      email: event.target.email.value,
+      phone: event.target.phone.value,
+    };
+    
+
+    // Store userDetails to the local storage, the email value is used as the key and the userDetails object is stringified.
+    localStorage.setItem(userDetails.email, JSON.stringify(userDetails));
 
 
- //append the editBtn to the li element we created called userItems
-userItem.appendChild(editBtn)
+    // Call function to display user information on screen (more on this function below)
+    displayUserOnScreen(userDetails);
 
-});
+
+    // After storing and displaying the user details, clear the input fields in the form
+    document.getElementById("username").value = "";
+    document.getElementById("email").value = "";
+    document.getElementById("phone").value = "";
+}
+  
+
+function displayUserOnScreen(userDetails) 
+{
+
+    // Create an li element to host the user details
+    const userItem = document.createElement("li");
+
+
+    // Append the user details (username, email and phone) text node to the li element
+    userItem.appendChild(
+      document.createTextNode(
+       ` ${userDetails.username} - ${userDetails.email} - ${userDetails.phone}`
+      )
+    );
+  
+    // Create a Delete button for removing user details
+    const deleteBtn = document.createElement("button");
+    deleteBtn.appendChild(document.createTextNode("Delete"));
+    userItem.appendChild(deleteBtn);
+
+
+    // Create an Edit button for editing user details
+    const editBtn = document.createElement("button");
+    editBtn.appendChild(document.createTextNode("Edit"));
+    userItem.appendChild(editBtn);
+
+    // Select the ul element and append the new li to it
+    const userList = document.querySelector("ul");
+    userList.appendChild(userItem);
+
+    // When the delete button is clicked, remove the user's information from the display (user list), and also remove from localStorage
+    deleteBtn.addEventListener("click", function (event) 
+    {
+      userList.removeChild(event.target.parentElement);
+      localStorage.removeItem(userDetails.email);
+    });
+  
+    // When the edit button is clicked, remove the data from the list, and from localStorage, then fill out the input form for editing
+
+    editBtn.addEventListener("click", function (event) 
+    {
+      userList.removeChild(event.target.parentElement);
+      localStorage.removeItem(userDetails.email);
+      document.getElementById("username").value = userDetails.username;
+      document.getElementById("email").value = userDetails.email;
+      document.getElementById("phone").value = userDetails.phone;
+    });
+}
