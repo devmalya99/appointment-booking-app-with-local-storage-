@@ -73,4 +73,7 @@ body {
     cursor: pointer;
     margin-left: 10px;
    }
-   
+
+#userList {
+    list-style-type: decimal;
+}
