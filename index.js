@@ -1,3 +1,6 @@
+
+
+
 // The handleFormSubmit function is called when a form is submitted.
 function handleFormSubmit(event) 
 {
@@ -52,7 +55,7 @@ function displayUserOnScreen(userDetails)
     // Append the user details (username, email and phone) text node to the li element
     userItem.appendChild(
       document.createTextNode(
-       ` ${userDetails.username} - ${userDetails.email} - ${userDetails.phone}`
+       ` UserName:${userDetails.username} ; User Email is : ${userDetails.email} ; User Phone Number is: ${userDetails.phone}`
       )
     );
   
@@ -89,3 +92,19 @@ function displayUserOnScreen(userDetails)
       document.getElementById("phone").value = userDetails.phone;
     });
 }
+
+//fetch saved data from cloud
+function loadAllPastUserData()
+{
+  axios.get("https://crudcrud.com/api/18490e87f670438f88233c86ada08490/appointmentData")
+  .then(res=>
+    {
+      const userData=res.data;
+      userData.forEach((user)=>
+      {
+        displayUserOnScreen(user)
+      })
+    })   
+}  
+// Call function to load user data when the script is loaded
+loadAllPastUserData()
