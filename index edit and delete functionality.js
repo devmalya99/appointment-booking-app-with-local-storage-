@@ -50,7 +50,7 @@ function displayUserOnScreen(userDetails)
 
     // Create an li element to host the user details
     const userItem = document.createElement("li");
-
+    userItem.id = userDetails._id;
 
     // Append the user details (username, email and phone) text node to the li element
     userItem.appendChild(
@@ -60,37 +60,51 @@ function displayUserOnScreen(userDetails)
     );
   
     // Create a Delete button for removing user details
-    const deleteBtn = document.createElement("button");
-    deleteBtn.appendChild(document.createTextNode("Delete"));
-    userItem.appendChild(deleteBtn);
+    const deleteBtn = createDeleteButton(userDetails, userItem);
+    userItem.appendChild(deleteBtn)
 
 
     // Create an Edit button for editing user details
+    const editBtn = createEditButton(userDetails, userItem);
+    userItem.appendChild(editBtn);
+ 
+    document.querySelector("ul").appendChild(userItem);
+}
+
+function createDeleteButton(userDetails, userItem) 
+{
+    const deleteBtn = document.createElement("button");
+    deleteBtn.appendChild(document.createTextNode("Delete"));
+
+    deleteBtn.addEventListener("click", function (event)  
+    {
+        axios.delete(`https://crudcrud.com/api/18490e87f670438f88233c86ada08490/appointmentData/${userItem.id}`)
+            .then(res=>
+            {
+                document.querySelector("ul").removeChild(userItem);
+                localStorage.removeItem(userDetails.email);
+            });
+    });
+
+    return deleteBtn;
+}
+
+function createEditButton(userDetails, userItem) 
+{
     const editBtn = document.createElement("button");
     editBtn.appendChild(document.createTextNode("Edit"));
-    userItem.appendChild(editBtn);
-
-    // Select the ul element and append the new li to it
-    const userList = document.querySelector("ul");
-    userList.appendChild(userItem);
-
-    // When the delete button is clicked, remove the user's information from the display (user list), and also remove from localStorage
-    deleteBtn.addEventListener("click", function (event) 
-    {
-      userList.removeChild(event.target.parentElement);
-      localStorage.removeItem(userDetails.email);
-    });
-  
-    // When the edit button is clicked, remove the data from the list, and from localStorage, then fill out the input form for editing
 
     editBtn.addEventListener("click", function (event) 
     {
-      userList.removeChild(event.target.parentElement);
+      document.querySelector("ul").removeChild(userItem);
       localStorage.removeItem(userDetails.email);
+
       document.getElementById("username").value = userDetails.username;
       document.getElementById("email").value = userDetails.email;
       document.getElementById("phone").value = userDetails.phone;
     });
+
+    return editBtn;
 }
 
 //fetch saved data from cloud
