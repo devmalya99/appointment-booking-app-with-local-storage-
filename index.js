@@ -17,9 +17,22 @@ function handleFormSubmit(event)
     // Store userDetails to the local storage, the email value is used as the key and the userDetails object is stringified.
     localStorage.setItem(userDetails.email, JSON.stringify(userDetails));
 
+     //store details on cloud 
 
-    // Call function to display user information on screen (more on this function below)
-    displayUserOnScreen(userDetails);
+    axios.post("https://crudcrud.com/api/18490e87f670438f88233c86ada08490/appointmentData",userDetails)
+    .then((res)=>{
+     // Call function to display user information on screen (more on this function below)
+     displayUserOnScreen(res.data);
+     console.log(res);
+     })
+    .catch((er)=>
+    {
+      document.body.innerHTML= document.body.innerHTML+"<h1>Something Went Wrong</h1>"
+      console.log(err)
+    }
+      );
+
+   
 
 
     // After storing and displaying the user details, clear the input fields in the form
